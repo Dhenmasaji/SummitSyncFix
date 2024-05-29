@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tugas_akhir_tpm/landing.dart';
 import 'package:tugas_akhir_tpm/homepage.dart';
 import 'package:tugas_akhir_tpm/onboarding.dart'; // Import halaman onboarding
 

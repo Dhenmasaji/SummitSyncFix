@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:tugas_akhir_tpm/landing.dart';
+import 'package:tugas_akhir_tpm/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -16,8 +16,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _completeOnboarding() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('seenOnboarding', true);
+
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LandingPage()),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      ),
     );
   }
 
@@ -74,10 +90,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: GoogleFonts.poppins(color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 18),
+                          padding: EdgeInsets.symmetric(vertical: 20),
                           minimumSize: Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           backgroundColor: Color(0xFFFEAA45),
                         ),

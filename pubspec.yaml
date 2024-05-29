@@ -81,8 +81,6 @@ flutter:
   assets:
     - assets/
     - assets/logo.png
-    - assets/splash.svg
-    - assets/abas.png
     - assets/profile.jpeg
     - assets/logo_ob.jpg
     - assets/OB1.jpg
