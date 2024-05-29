@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_akhir_tpm/landing.dart';
 import 'package:tugas_akhir_tpm/homepage.dart';
+import 'package:tugas_akhir_tpm/onboarding.dart'; // Import halaman onboarding
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
-  final loggedIn = prefs.getBool('loggedIn') ?? false; // Check for logged in state
-  runApp(MyApp(isLoggedIn: loggedIn));
+  final loggedIn = prefs.getBool('loggedIn') ?? false;
+  final seenOnboarding = prefs.getBool('seenOnboarding') ?? true;
+  runApp(MyApp(isLoggedIn: loggedIn, seenOnboarding: seenOnboarding));
 }
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
+  final bool seenOnboarding;
 
-  MyApp({required this.isLoggedIn});
+  MyApp({required this.isLoggedIn, required this.seenOnboarding});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: isLoggedIn ? HomePage() : SplashScreen(),
+      home: isLoggedIn ? HomePage() : (seenOnboarding ? SplashScreen() : OnboardingScreen()),
     );
   }
 }
@@ -37,9 +40,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 7), () {
+    Timer(Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LandingPage()),
+        MaterialPageRoute(builder: (context) => OnboardingScreen()),
       );
     });
   }
@@ -47,12 +50,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.3,
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Image.asset(
-            'assets/logo.png',
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/logo_ob.jpg'),
+            fit: BoxFit.cover,
           ),
         ),
       ),
