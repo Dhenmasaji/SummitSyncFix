@@ -14,7 +14,8 @@ class DetailPendakiPage extends StatelessWidget {
             padding: const EdgeInsets.all(28.0),
             child: FutureBuilder(
               future: _getPendakiData(),
-              builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+              builder: (context,
+                  AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
@@ -24,7 +25,8 @@ class DetailPendakiPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 38.0, 16.0, 8.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(0.0, 52.0, 16.0, 8.0),
                         child: Row(
                           children: [
                             Image(
@@ -38,8 +40,8 @@ class DetailPendakiPage extends StatelessWidget {
                               children: [
                                 Text(
                                   'Summit Sync',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 20.0,
+                                  style: GoogleFonts.bitter(
+                                    fontSize: 28.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -63,7 +65,9 @@ class DetailPendakiPage extends StatelessWidget {
                             padding: EdgeInsets.only(left: 12.0),
                             child: Text(
                               'No Data Available',
-                              style: GoogleFonts.poppins(fontSize: 14.0, fontWeight: FontWeight.normal),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.normal),
                             ),
                           ),
                         ],
@@ -76,7 +80,8 @@ class DetailPendakiPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 38.0, 16.0, 8.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(0.0, 48.0, 16.0, 0.0),
                         child: Row(
                           children: [
                             Image(
@@ -90,8 +95,8 @@ class DetailPendakiPage extends StatelessWidget {
                               children: [
                                 Text(
                                   'Summit Sync',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 20.0,
+                                  style: GoogleFonts.bitter(
+                                    fontSize: 28.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -115,7 +120,8 @@ class DetailPendakiPage extends StatelessWidget {
                             padding: EdgeInsets.only(left: 12.0),
                             child: Text(
                               'Data Reservasi Pendaki',
-                              style: GoogleFonts.poppins(fontSize: 16.0, fontWeight: FontWeight.w600),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 16.0, fontWeight: FontWeight.w600),
                             ),
                           ),
                         ],
@@ -124,6 +130,7 @@ class DetailPendakiPage extends StatelessWidget {
                         child: ListView.separated(
                           itemCount: data.length,
                           itemBuilder: (context, index) {
+                            bool isPaid = data[index]['status'] == 'Paid';
                             return Card(
                               margin: EdgeInsets.all(8.0),
                               shape: RoundedRectangleBorder(
@@ -136,16 +143,32 @@ class DetailPendakiPage extends StatelessWidget {
                                     child: ListTile(
                                       title: Text(
                                         '${data[index]['namaKetua']}',
-                                        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       subtitle: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text('Email: ${data[index]['email']}'),
-                                          Text('No HP: ${data[index]['phone']}'),
-                                          Text('Jumlah Rombongan: ${data[index]['jumlahRombongan']}'),
-                                          Text('Tanggal Naik: ${data[index]['tanggalNaik']}'),
-                                          Text('Tanggal Turun: ${data[index]['tanggalTurun']}'),
+                                          Text(
+                                              'Email: ${data[index]['email']}'),
+                                          Text(
+                                              'No HP: ${data[index]['phone']}'),
+                                          Text(
+                                              'Jumlah Rombongan: ${data[index]['jumlahRombongan']}'),
+                                          Text(
+                                              'Tanggal Naik: ${data[index]['tanggalNaik']}'),
+                                          Text(
+                                              'Tanggal Turun: ${data[index]['tanggalTurun']}'),
+                                          Text(
+                                            isPaid ? 'Sudah Dibayar' : 'Belum Dibayar',
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: isPaid ? Colors.green : Colors.red,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -157,7 +180,8 @@ class DetailPendakiPage extends StatelessWidget {
                                         Container(
                                           margin: EdgeInsets.all(12.0),
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
                                             color: Colors.orange,
                                           ),
                                           child: IconButton(
@@ -171,8 +195,10 @@ class DetailPendakiPage extends StatelessWidget {
                                         Container(
                                           margin: EdgeInsets.all(12.0),
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8.0),
-                                            color: const Color.fromARGB(255, 0, 74, 60),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            color: const Color.fromARGB(
+                                                255, 0, 74, 60),
                                           ),
                                           child: IconButton(
                                             icon: Icon(Icons.payment),
@@ -181,7 +207,8 @@ class DetailPendakiPage extends StatelessWidget {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder: (context) => PaymentPage(
+                                                  builder: (context) =>
+                                                      PaymentPage(
                                                     pendakiData: data[index],
                                                   ),
                                                 ),
@@ -208,10 +235,10 @@ class DetailPendakiPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 0,
-            left: 0,
+            top: 30,
+            left: 8,
             child: Padding(
-              padding: const EdgeInsets.all(22.0),
+              padding: const EdgeInsets.all(10.0),
               child: IconButton(
                 icon: Icon(Icons.arrow_back),
                 onPressed: () {

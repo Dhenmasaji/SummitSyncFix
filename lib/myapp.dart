@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_akhir_tpm/login.dart';
 import 'package:tugas_akhir_tpm/homepage.dart';
-import 'package:tugas_akhir_tpm/saran.dart';
 import 'package:tugas_akhir_tpm/myapp_detail.dart';
 
 class MyappPage extends StatefulWidget {
@@ -72,11 +71,6 @@ class _MyappPageState extends State<MyappPage> {
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SaranPage()),
-      );
     } else {
       setState(() {
         _selectedIndex = index;
@@ -139,13 +133,15 @@ class _MyappPageState extends State<MyappPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(28.0, 28.0, 28.0, 0.0),
+  body: SafeArea(
+    child: Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(28.0, 34.0, 28.0, 0.0),
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 8.0),
+                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 8.0),
                 child: Row(
                   children: [
                     Image(
@@ -159,8 +155,8 @@ class _MyappPageState extends State<MyappPage> {
                       children: [
                         Text(
                           'Summit Sync',
-                          style: GoogleFonts.poppins(
-                            fontSize: 20.0,
+                          style: GoogleFonts.bitter(
+                            fontSize: 28.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -179,7 +175,7 @@ class _MyappPageState extends State<MyappPage> {
               SizedBox(height: 10),
               Text(
                 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry Lorem Ipsum is',
-                style: GoogleFonts.poppins(fontSize: 12.0),
+                style: GoogleFonts.poppins(fontSize: 14.0),
                 textAlign: TextAlign.justify,
               ),
               SizedBox(height: 15),
@@ -233,8 +229,8 @@ class _MyappPageState extends State<MyappPage> {
                             children: [
                               Text(
                                 filteredVolcanoData[index]['nama'],
-                                style: GoogleFonts.poppins(
-                                    fontSize: 18.0,
+                                style: GoogleFonts.bitter(
+                                    fontSize: 20.0,
                                     fontWeight: FontWeight.w600),
                               ),
                               SizedBox(height: 5.0),
@@ -295,40 +291,24 @@ class _MyappPageState extends State<MyappPage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: SizedBox(
-        height: 70,
-        child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.sticky_note_2),
-              label: 'Saran & Kesan',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.hiking),
-              label: 'SummitSync',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.logout_outlined),
-              label: 'Logout',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.orange,
-          unselectedItemColor: Colors.grey,
-          onTap: _onItemTapped,
-          selectedLabelStyle: GoogleFonts.poppins(),
-          unselectedLabelStyle: GoogleFonts.poppins(),
+        Positioned(
+          top: 0.0,
+          left: 16.0,
+          child: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                ); // Navigate back
+            },
+          ),
         ),
-      ),
-    );
+      ],
+    ),
+  ),
+);
+
   }
 }

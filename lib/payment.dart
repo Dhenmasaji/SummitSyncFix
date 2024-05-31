@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tugas_akhir_tpm/detail_pendaki.dart';
 
 class PaymentPage extends StatefulWidget {
   final Map<String, dynamic> pendakiData;
@@ -94,7 +96,7 @@ class _PaymentPageState extends State<PaymentPage> {
             Stack(
               children: [
                 Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 8.0),
+                  padding: const EdgeInsets.fromLTRB(0.0, 30.0, 16.0, 8.0),
                   child: Row(
                     children: [
                       Image(
@@ -108,8 +110,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         children: [
                           Text(
                             'Summit Sync',
-                            style: GoogleFonts.poppins(
-                              fontSize: 20.0,
+                            style: GoogleFonts.bitter(
+                              fontSize: 28.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -370,24 +372,48 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ],
             ),
-            SizedBox(height: 175),
+            SizedBox(height: 190),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // Add payment processing logic here
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.blue,
-                      content: Text('Payment Successful')
-                    ),
-                  );
-                },
+                onPressed: () async {
+  // Save payment status
+  final prefs = await SharedPreferences.getInstance();
+  List<dynamic> pendakiList = json.decode(prefs.getString('pendakiList') ?? '[]');
+  
+  // Find the current pendaki and update the status
+  for (var pendaki in pendakiList) {
+    if (pendaki['namaKetua'] == widget.pendakiData['namaKetua']) {
+      pendaki['status'] = 'Paid';
+      break;
+    }
+  }
+  
+  await prefs.setString('pendakiList', json.encode(pendakiList));
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.blue,
+      content: Text('Payment Successful'),
+    ),
+  );
+
+  await Future.delayed(Duration(seconds: 2));
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => DetailPendakiPage(),
+    ),
+  );
+},
+
                 child: Text(
                   'Pay Now',
-                  style: GoogleFonts.poppins(color: Colors.white,),
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -405,10 +431,12 @@ class _PaymentPageState extends State<PaymentPage> {
                 },
                 child: Text(
                   'Cancel',
-                  style: GoogleFonts.poppins(color: Colors.white,),
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

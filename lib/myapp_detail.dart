@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:tugas_akhir_tpm/login.dart';
-import 'package:tugas_akhir_tpm/saran.dart';
 import 'package:tugas_akhir_tpm/detail_pendaki.dart';
 import 'package:tugas_akhir_tpm/homepage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,78 +52,6 @@ class _MyappDetailPageState extends State<MyappDetailPage> {
     } catch (e) {
       print('Error: $e');
     }
-  }
-
-  void _onItemTapped(int index) {
-    if (index == 3) {
-      _showLogoutConfirmation();
-    } else if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SaranPage()),
-      );
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
-
-  void _showLogoutConfirmation() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white, // Set background color to white
-          title: Text(
-            "Logout",
-            style: GoogleFonts.poppins(
-              fontSize: 26, // Set font size to 20
-              fontWeight: FontWeight.w600, // Set font weight to bold
-            ),
-          ),
-          content: Text(
-            "Are you sure you want to logout?",
-            style: GoogleFonts.poppins(), // Apply Poppins font to content
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('loggedIn', false);
-                await prefs.clear();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Text(
-                "Yes",
-                style: GoogleFonts.poppins(
-                  color: Colors.red, // Set text color to red
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                "No",
-                style: GoogleFonts.poppins(
-                  color: Colors.green, // Set text color to green
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   bool validateForm() {
@@ -183,7 +110,11 @@ class _MyappDetailPageState extends State<MyappDetailPage> {
                 color: Colors.green,
               ),
               SizedBox(width: 8),
-              Text('Reservasi Berhasil'),
+              Text(
+                'Reservasi Berhasil',
+                style: GoogleFonts.bitter(
+                    fontSize: 22.0, fontWeight: FontWeight.w600),
+              ),
             ],
           ),
           content: Text('Reservasi Anda telah berhasil diproses.'),
@@ -204,13 +135,13 @@ class _MyappDetailPageState extends State<MyappDetailPage> {
     );
   }
 
-
   void _saveDataToLocalDatabase() async {
     final prefs = await SharedPreferences.getInstance();
 
     // Ambil data yang ada
     String? existingData = prefs.getString('pendakiList');
-    List<dynamic> pendakiList = existingData != null ? json.decode(existingData) : [];
+    List<dynamic> pendakiList =
+        existingData != null ? json.decode(existingData) : [];
 
     // Tambahkan data baru
     Map<String, dynamic> newPendaki = {
@@ -236,241 +167,216 @@ class _MyappDetailPageState extends State<MyappDetailPage> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28.0, 44.0, 28.0, 0.0),
-              child: Column(
-                children: [
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Reservation Page',
-                        style: GoogleFonts.poppins(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ), // Adjust spacing as needed
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Gunung ${widget.volcanoName}', // Display volcano name here
-                        style: GoogleFonts.poppins(
-                            fontSize: 16.0, fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Divider(
-                    thickness: 1.0,
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          'Silakan isi formulir berikut untuk melakukan reservasi pendakian. Pastikan semua data diisi dengan benar.',
-                          style: GoogleFonts.poppins(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          textAlign: TextAlign.justify,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Nama Ketua Rombongan',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(34.0, 0.0, 34.0, 0.0),
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Reservation Page',
+                      style: GoogleFonts.bitter(
+                          fontSize: 28.0, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                  ],
+                ), // Adjust spacing as needed
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Gunung ${widget.volcanoName}', // Display volcano name here
+                      style: GoogleFonts.poppins(
+                          fontSize: 16.0, fontWeight: FontWeight.normal),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      labelText: 'No Handphone',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _groupController,
-                    decoration: InputDecoration(
-                      labelText: 'Jumlah Rombongan',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _dateUpController,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            labelText: 'Tanggal Naik',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () async {
-                                final DateTime? pickedDate =
-                                    await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (pickedDate != null) {
-                                  setState(() {
-                                    selectedDate = pickedDate;
-                                    _dateUpController.text =
-                                        DateFormat('yyyy-MM-dd')
-                                            .format(selectedDate!);
-                                  });
-                                }
-                              },
-                              icon: Icon(Icons.date_range_outlined),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _dateDownController,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            labelText: 'Tanggal Turun',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () async {
-                                final DateTime? pickedDate2 =
-                                    await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (pickedDate2 != null) {
-                                  setState(() {
-                                    selectedDate2 = pickedDate2;
-                                    _dateDownController.text =
-                                        DateFormat('yyyy-MM-dd')
-                                            .format(selectedDate2!);
-                                  });
-                                }
-                              },
-                              icon: Icon(Icons.date_range_outlined),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _onSubmitButtonPressed,
+                  ],
+                ),
+                SizedBox(height: 5),
+                Divider(
+                  thickness: 1.0,
+                ),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
                       child: Text(
-                        'Submit',
+                        'Silakan isi formulir berikut untuk melakukan reservasi pendakian. Pastikan semua data diisi dengan benar.',
                         style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromARGB(255, 6, 53, 35),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.normal,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        backgroundColor: Colors.orange,
+                        textAlign: TextAlign.justify,
                       ),
                     ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama Ketua Rombongan',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: 15),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(
+                    labelText: 'No Handphone',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                TextFormField(
+                  controller: _groupController,
+                  decoration: InputDecoration(
+                    labelText: 'Jumlah Rombongan',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _dateUpController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Tanggal Naik',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () async {
+                              final DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2100),
+                              );
+                              if (pickedDate != null) {
+                                setState(() {
+                                  selectedDate = pickedDate;
+                                  _dateUpController.text =
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(selectedDate!);
+                                });
+                              }
+                            },
+                            icon: Icon(Icons.date_range_outlined),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _dateDownController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Tanggal Turun',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () async {
+                              final DateTime? pickedDate2 =
+                                  await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2100),
+                              );
+                              if (pickedDate2 != null) {
+                                setState(() {
+                                  selectedDate2 = pickedDate2;
+                                  _dateDownController.text =
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(selectedDate2!);
+                                });
+                              }
+                            },
+                            icon: Icon(Icons.date_range_outlined),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 120),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _onSubmitButtonPressed,
+                    child: Text(
+                      'Submit',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      backgroundColor: Color(0xFF004A3C),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      backgroundColor: Colors.orange,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Positioned(
-              top: 16.0,
-              left: 16.0,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context); // Navigasi kembali ke halaman sebelumnya
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: SizedBox(
-        height: 70,
-        child: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.sticky_note_2),
-              label: 'Saran & Kesan',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.hiking),
-              label: 'SummitSync',
-            ),
-            BottomNavigationBarItem(
-              backgroundColor: Color(0xFF004A3C),
-              icon: Icon(Icons.logout_outlined),
-              label: 'Logout',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.orange,
-          unselectedItemColor: Colors.grey,
-          onTap: _onItemTapped,
-          selectedLabelStyle: GoogleFonts.poppins(),
-          unselectedLabelStyle: GoogleFonts.poppins(),
+          ),
         ),
       ),
     );

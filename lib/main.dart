@@ -1,14 +1,24 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tugas_akhir_tpm/homepage.dart';
-import 'package:tugas_akhir_tpm/onboarding.dart'; // Import halaman onboarding
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'homepage.dart';
+import 'onboarding.dart';
+import 'package:tugas_akhir_tpm/register.dart';
+import 'user_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserAdapter());
+  await Hive.openBox<User>('users');
+
   final prefs = await SharedPreferences.getInstance();
   final loggedIn = prefs.getBool('loggedIn') ?? false;
   final seenOnboarding = prefs.getBool('seenOnboarding') ?? true;
+  
   runApp(MyApp(isLoggedIn: loggedIn, seenOnboarding: seenOnboarding));
 }
 
